@@ -2,11 +2,14 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import './App.css'
 import { AuthProvider } from './context/AuthContext'
 import Navbar from './components/Navbar'
+import ScrollToTop from './components/ScrollToTop'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import ForgotPassword from './pages/ForgotPassword'
 import Dashboard from './pages/Dashboard'
+import MyAccount from './pages/MyAccount'
+import TeacherDetail from './pages/TeacherDetail'
 import Courses from './pages/Courses'
 import Teachers from './pages/Teachers'
 import Blog from './pages/Blog'
@@ -26,6 +29,8 @@ const AppContent = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/my-account" element={<MyAccount />} />
+        <Route path="/teacher/:id" element={<TeacherDetail />} />
         <Route path="/courses" element={<Courses />} />
         <Route path="/teachers" element={<Teachers />} />
         <Route path="/blog" element={<Blog />} />
@@ -39,6 +44,7 @@ function App() {
   return (
     <AuthProvider>
       <Router>
+        <ScrollToTop />
         <AppContent />
       </Router>
     </AuthProvider>

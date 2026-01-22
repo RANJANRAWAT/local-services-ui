@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import logo from "../../assets/logo.png";
 import {
@@ -19,6 +19,18 @@ const Navbar = () => {
   const [searchText, setSearchText] = useState("");
   const [currentSlide, setCurrentSlide] = useState(0);
   const { isLoggedIn } = useAuth();
+  const location = useLocation();
+
+  const navItems = [
+    { label: "HOME", to: "/dashboard" },
+    { label: "COURSES", to: "/courses" },
+    { label: "TEACHERS", to: "/teachers" },
+    { label: "BLOG", to: "/blog" },
+    { label: "CONTACT", to: "/contact" },
+  ];
+
+  const isActive = (to) =>
+    location.pathname === to || (to !== "/dashboard" && location.pathname.startsWith(to));
 
   // Sliding banner messages
   const bannerMessages = [
@@ -84,7 +96,7 @@ const Navbar = () => {
                 </>
               ) : (
                 <Link
-                  to="/dashboard"
+                  to="/my-account"
                   className="text-white font-medium cursor-pointer hover:text-purple-300 transition text-xs sm:text-sm"
                 >
                   My Account
@@ -151,12 +163,43 @@ const Navbar = () => {
             {/* Right Side - Menu + Actions */}
             <div className="flex items-center gap-4 flex-shrink-0">
               {/* Menu */}
-              <nav className="hidden lg:flex gap-6 font-medium text-gray-800">
-                <Link to="/dashboard" className="hover:text-purple-600 transition">HOME</Link>
-                <Link to="/courses" className="hover:text-purple-600 transition">COURSES</Link>
-                <Link to="/teachers" className="hover:text-purple-600 transition">TEACHERS</Link>
-                <Link to="/blog" className="hover:text-purple-600 transition">BLOG</Link>
-                <Link to="/contact" className="hover:text-purple-600 transition">CONTACT</Link>
+              <nav className="hidden lg:flex items-center gap-2 font-bold text-gray-800 relative">
+                {/* Floating Glow Behind Nav */}
+                <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+                  <div className="nav-float-blob absolute -top-6 left-10 w-28 h-28 bg-purple-500/10 rounded-full blur-2xl"></div>
+                  <div className="nav-float-blob2 absolute -bottom-6 right-6 w-24 h-24 bg-indigo-500/10 rounded-full blur-2xl"></div>
+                </div>
+
+                {navItems.map((item) => {
+                  const active = isActive(item.to);
+                  return (
+                    <Link
+                      key={item.to}
+                      to={item.to}
+                      className={[
+                        "group relative px-4 py-2 rounded-full transition-all duration-300",
+                        "focus:outline-none focus:ring-4 focus:ring-purple-200/60",
+                        active
+                          ? "text-white bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-600 shadow-lg shadow-purple-500/25"
+                          : "text-gray-800 hover:text-purple-700 hover:bg-purple-50",
+                      ].join(" ")}
+                    >
+                      <span className="relative z-10 tracking-wide text-sm">
+                        {item.label}
+                      </span>
+
+                      {/* Animated underline for non-active */}
+                      {!active && (
+                        <span className="absolute left-1/2 -bottom-0.5 h-0.5 w-0 -translate-x-1/2 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-full transition-all duration-300 group-hover:w-8"></span>
+                      )}
+
+                      {/* Floating dot for active */}
+                      {active && (
+                        <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-white shadow animate-pulse"></span>
+                      )}
+                    </Link>
+                  );
+                })}
               </nav>
 
               {/* Icons */}
@@ -195,6 +238,20 @@ const Navbar = () => {
           </div>
         </div>
       </div>
+
+      {/* Local animations for navbar floating blobs */}
+      <style>{`
+        @keyframes navFloat1 {
+          0%, 100% { transform: translate(0px, 0px); }
+          50% { transform: translate(10px, 6px); }
+        }
+        @keyframes navFloat2 {
+          0%, 100% { transform: translate(0px, 0px); }
+          50% { transform: translate(-8px, -6px); }
+        }
+        .nav-float-blob { animation: navFloat1 4.5s ease-in-out infinite; }
+        .nav-float-blob2 { animation: navFloat2 5.5s ease-in-out infinite; }
+      `}</style>
     </header>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaEnvelope, FaLock, FaEye, FaEyeSlash, FaCopy, FaCheck, FaGraduationCap, FaBook, FaUsers, FaAward } from "react-icons/fa";
 import { useAuth } from "../../context/AuthContext";
@@ -13,7 +13,18 @@ const Login = () => {
   const [error, setError] = useState("");
   const [copied, setCopied] = useState({ email: false, password: false });
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, isLoggedIn } = useAuth();
+
+  // Prevent back navigation after logout - replace history
+  useEffect(() => {
+    // Replace current history entry to prevent back navigation
+    window.history.replaceState(null, "", "/login");
+    
+    // If user is already logged in, redirect to dashboard
+    if (isLoggedIn) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [isLoggedIn, navigate]);
 
   // Dummy credentials
   const dummyCredentials = {
@@ -53,7 +64,7 @@ const Login = () => {
     if (formData.email && formData.password) {
       const success = login(formData.email, formData.password);
       if (success) {
-        navigate("/dashboard");
+        navigate("/dashboard", { replace: true });
       }
     } else {
       setError("Please enter both email and password");
@@ -269,4 +280,3 @@ const Login = () => {
 };
 
 export default Login;
-
