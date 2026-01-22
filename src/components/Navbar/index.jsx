@@ -115,30 +115,28 @@ const Navbar = () => {
                   {bannerMessages.map((message, index) => (
                     <div
                       key={index}
-                      className={`absolute inset-0 flex items-center justify-center text-white font-semibold text-xs transition-all duration-1000 ease-in-out ${
-                        index === currentSlide
-                          ? "translate-x-0 opacity-100"
-                          : index < currentSlide
+                      className={`absolute inset-0 flex items-center justify-center text-white font-semibold text-xs transition-all duration-1000 ease-in-out ${index === currentSlide
+                        ? "translate-x-0 opacity-100"
+                        : index < currentSlide
                           ? "-translate-x-full opacity-0"
                           : "translate-x-full opacity-0"
-                      }`}
+                        }`}
                     >
                       <span className="truncate px-2">{message}</span>
                     </div>
                   ))}
                 </div>
-                
+
                 {/* Slide Indicators */}
                 <div className="absolute bottom-0.5 left-1/2 transform -translate-x-1/2 flex gap-1 z-10">
                   {bannerMessages.map((_, index) => (
                     <button
                       key={index}
                       onClick={() => setCurrentSlide(index)}
-                      className={`h-1 rounded-full transition-all duration-300 ${
-                        index === currentSlide
-                          ? "w-4 bg-white"
-                          : "w-1 bg-white/50 hover:bg-white/75"
-                      }`}
+                      className={`h-1 rounded-full transition-all duration-300 ${index === currentSlide
+                        ? "w-4 bg-white"
+                        : "w-1 bg-white/50 hover:bg-white/75"
+                        }`}
                     />
                   ))}
                 </div>
@@ -212,9 +210,9 @@ const Navbar = () => {
                 <FaShoppingCart className="text-gray-600 cursor-pointer hover:text-purple-600 transition" />
               </div>
 
-              <button className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-4 sm:px-6 py-2 rounded-full font-semibold hover:opacity-90 transition text-sm sm:text-base whitespace-nowrap">
+              {/* <button className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-4 sm:px-6 py-2 rounded-full font-semibold hover:opacity-90 transition text-sm sm:text-base whitespace-nowrap">
                 Contact Us →
-              </button>
+              </button> */}
 
               {/* Search Popup */}
               {showSearch && (

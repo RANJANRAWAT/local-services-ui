@@ -14,6 +14,12 @@ import Courses from './pages/Courses'
 import Teachers from './pages/Teachers'
 import Blog from './pages/Blog'
 import Contact from './pages/Contact'
+import About from './pages/About'
+import Testimonials from './pages/Testimonials'
+import HelpCenter from './pages/HelpCenter'
+import Terms from './pages/Terms'
+import Privacy from './pages/Privacy'
+import Sitemap from './pages/Sitemap'
 
 const AppContent = () => {
   const location = useLocation();
@@ -35,6 +41,12 @@ const AppContent = () => {
         <Route path="/teachers" element={<Teachers />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/testimonials" element={<Testimonials />} />
+        <Route path="/help-center" element={<HelpCenter />} />
+        <Route path="/terms" element={<Terms />} />
+        <Route path="/privacy" element={<Privacy />} />
+        <Route path="/sitemap" element={<Sitemap />} />
       </Routes>
     </div>
   );
