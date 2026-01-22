@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { FaCalendar, FaUser, FaArrowRight, FaTag } from "react-icons/fa";
+import { FaCalendar, FaUser, FaArrowRight, FaTag, FaClock } from "react-icons/fa";
+import Footer from "../../components/Footer";
 
 const Blog = () => {
   const blogPosts = [
@@ -67,59 +68,91 @@ const Blog = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-indigo-50 relative overflow-hidden">
+      {/* Floating Background Elements */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <div className="absolute top-20 right-10 w-80 h-80 bg-purple-300/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 left-10 w-96 h-96 bg-indigo-300/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-pink-300/10 rounded-full blur-3xl"></div>
+      </div>
+
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-20">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <h1 className="text-5xl font-bold mb-4">Our Blog</h1>
-          <p className="text-xl text-purple-100">Latest insights, tips, and stories from the world of online education</p>
+      <section className="relative z-10 bg-gradient-to-r from-purple-600 via-indigo-600 to-pink-600 text-white py-24 overflow-hidden">
+        <div className="absolute inset-0">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+          <div className="absolute bottom-0 left-0 w-80 h-80 bg-white/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
+        </div>
+        
+        <div className="max-w-7xl mx-auto px-6 text-center relative z-10">
+          <h1 className="text-6xl md:text-7xl font-extrabold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white via-purple-100 to-white">
+            Our Blog
+          </h1>
+          <p className="text-xl md:text-2xl text-purple-100 max-w-3xl mx-auto">
+            Latest insights, tips, and stories from the world of online education
+          </p>
         </div>
       </section>
 
       {/* Blog Posts */}
-      <section className="py-16">
+      <section className="relative z-10 py-16">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogPosts.map((post) => (
+            {blogPosts.map((post, index) => (
               <article
                 key={post.id}
-                className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden group cursor-pointer"
+                className="group bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 overflow-hidden border border-purple-100/50 cursor-pointer"
+                style={{ animationDelay: `${index * 100}ms` }}
               >
-                {/* Blog Image */}
-                <div className="bg-gradient-to-br from-purple-500 to-indigo-500 h-48 flex items-center justify-center text-6xl group-hover:scale-110 transition-transform">
-                  {post.image}
+                {/* Blog Image with Gradient */}
+                <div className="relative h-56 overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-500 via-indigo-500 to-pink-500 group-hover:scale-110 transition-transform duration-700 flex items-center justify-center text-7xl">
+                    {post.image}
+                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  
+                  {/* Category Badge */}
+                  <div className="absolute top-4 left-4">
+                    <div className="flex items-center gap-2 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-lg">
+                      <FaTag className="text-purple-600 text-xs" />
+                      <span className="text-purple-700 text-xs font-bold">{post.category}</span>
+                    </div>
+                  </div>
+
+                  {/* Read Time Badge */}
+                  <div className="absolute top-4 right-4">
+                    <div className="bg-black/60 backdrop-blur-sm text-white px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5">
+                      <FaClock className="text-xs" />
+                      {post.readTime}
+                    </div>
+                  </div>
                 </div>
 
                 <div className="p-6">
-                  {/* Category */}
-                  <div className="flex items-center gap-2 mb-3">
-                    <FaTag className="text-purple-600" />
-                    <span className="text-purple-600 text-sm font-semibold">{post.category}</span>
-                  </div>
-
-                  <h2 className="text-xl font-bold text-gray-800 mb-3 group-hover:text-purple-600 transition">
+                  <h2 className="text-xl font-extrabold text-gray-900 mb-3 group-hover:text-purple-600 transition-colors line-clamp-2">
                     {post.title}
                   </h2>
 
-                  <p className="text-gray-600 mb-4 line-clamp-3">{post.excerpt}</p>
+                  <p className="text-gray-600 mb-5 leading-relaxed line-clamp-3">{post.excerpt}</p>
 
                   {/* Meta Info */}
-                  <div className="flex items-center justify-between text-sm text-gray-500 mb-4 pb-4 border-b">
+                  <div className="flex items-center justify-between text-sm text-gray-500 mb-5 pb-5 border-b border-gray-100">
                     <div className="flex items-center gap-2">
-                      <FaUser />
-                      <span>{post.author}</span>
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-indigo-400 flex items-center justify-center text-white text-xs font-bold">
+                        {post.author.charAt(0)}
+                      </div>
+                      <span className="font-medium">{post.author}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <FaCalendar />
+                      <FaCalendar className="text-purple-600" />
                       <span>{post.date}</span>
                     </div>
                   </div>
 
                   <Link
                     to="#"
-                    className="inline-flex items-center gap-2 text-purple-600 font-semibold hover:text-purple-700"
+                    className="inline-flex items-center gap-2 text-purple-600 font-bold hover:text-purple-700 group/link"
                   >
-                    Read More <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
+                    Read More <FaArrowRight className="group-hover/link:translate-x-1 transition-transform" />
                   </Link>
                 </div>
               </article>
@@ -127,9 +160,10 @@ const Blog = () => {
           </div>
         </div>
       </section>
+
+      <Footer />
     </div>
   );
 };
 
 export default Blog;
-

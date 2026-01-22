@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import Profile from "./Profile";
 import {
   FaGraduationCap,
   FaBook,
@@ -9,12 +11,29 @@ import {
   FaChalkboardTeacher,
   FaPlayCircle,
   FaTimes,
+  FaFacebook,
+  FaTwitter,
+  FaLinkedin,
+  FaInstagram,
+  FaEnvelope,
+  FaPhone,
+  FaMapMarkerAlt,
+  FaPaperPlane,
 } from "react-icons/fa";
 import image from "../../assets/newImgs.png";
+import { TEACHERS } from "../../data/teachers";
 
 const Dashboard = () => {
-  const { user } = useAuth();
+  const { user, isLoggedIn } = useAuth();
+  const navigate = useNavigate();
   const [activeVideo, setActiveVideo] = useState(null);
+
+  // Protect route - redirect to login if not logged in
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate("/login", { replace: true });
+    }
+  }, [isLoggedIn, navigate]);
 
   const handlePlayVideo = (videoUrl) => {
     if (!videoUrl) return;
@@ -23,9 +42,17 @@ const Dashboard = () => {
     setActiveVideo(videoId);
   };
 
+  // Don't render if not logged in
+  if (!isLoggedIn) {
+    return null;
+  }
+
   return (
     <div className="min-h-screen bg-pink-50/30 font-sans text-gray-900 ">
-
+      {/* My Account / Profile */}
+      {/* <div className="max-w-7xl mx-auto px-6 pt-8">
+        <Profile user={user} />
+      </div> */}
 
       {/* Hero Section */}
       <div className="max-w-7xl mx-auto bg-purple-600 px-8 md:px-16 py-8 md:py-12 grid md:grid-cols-2 gap-8 items-center ">
@@ -57,7 +84,15 @@ const Dashboard = () => {
         {/* Right Image Composition */}
         <div className="relative flex justify-center py-10">
           {/* Background Decorative Circle */}
-          <div className="absolute inset-0 bg-transparent border-2 border-dashed border-purple-200 rounded-full w-[350px] h-[350px] animate-spin-slow opacity-50 m-auto -z-10 hidden md:block"></div>
+          {/* Background Decorative Circles */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            {/* Outer Glow */}
+            <div className="w-[450px] h-[450px] bg-white/20 rounded-full absolute blur-2xl"></div>
+            {/* Rotating Ring */}
+            <div className="w-[400px] h-[400px] border-[3px] border-dashed border-white/40 rounded-full absolute animate-spin-slow"></div>
+            {/* Inner Circle */}
+            <div className="w-[350px] h-[350px] bg-purple-500 rounded-full absolute shadow-2xl"></div>
+          </div>
 
           {/* Main Image */}
           <div className="relative z-10 w-full flex justify-center">
@@ -201,60 +236,264 @@ const Dashboard = () => {
         </div>
 
         {/* Teachers Section */}
-        <div className="mb-16">
-          <h2 className="text-3xl font-bold text-gray-800 mb-8">
-            Our Expert Teachers
-          </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[1, 2, 3, 4].map((teacher) => (
-              <div
-                key={teacher}
-                className="bg-white rounded-xl shadow-lg p-6 text-center hover:shadow-xl transition"
-              >
-                <div className="w-24 h-24 bg-gradient-to-br from-purple-400 to-indigo-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <FaChalkboardTeacher className="text-white text-4xl" />
+        <div className="bg-purple-600 rounded-[30px] p-8 md:p-12 mb-16 relative overflow-hidden">
+          {/* Decorative Elements */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl"></div>
+          <div className="absolute bottom-0 left-0 w-32 h-32 bg-pink-500/20 rounded-full translate-y-1/2 -translate-x-1/2 blur-xl"></div>
+
+          <div className="relative z-10">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-white mb-4">
+                Our Expert Teachers
+              </h2>
+              <p className="text-purple-100 max-w-2xl mx-auto">
+                Meet our dedicated team of expert instructors who are committed to your success.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {TEACHERS.slice(0, 4).map((teacher) => (
+                <div
+                  key={teacher.id}
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => navigate(`/teacher/${teacher.id}`)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") navigate(`/teacher/${teacher.id}`);
+                  }}
+                  className="group bg-white rounded-3xl p-6 text-center shadow-xl hover:-translate-y-2 transition-all duration-300 relative overflow-hidden cursor-pointer focus:outline-none focus:ring-4 focus:ring-white/30"
+                >
+                  {/* Hover Accent */}
+                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-400 to-pink-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
+
+                  <div className="relative mb-6">
+                    <div className="w-28 h-28 bg-gradient-to-br from-purple-100 to-indigo-50 rounded-full flex items-center justify-center mx-auto border-4 border-white shadow-lg group-hover:scale-105 transition-transform duration-300 text-5xl">
+                      {teacher.image || "👩‍🏫"}
+                    </div>
+                    <div className="absolute bottom-0 right-1/2 translate-x-1/2 translate-y-1/2 bg-yellow-400 text-xs font-bold px-2 py-0.5 rounded-full text-black shadow-sm">
+                      {teacher.rating} ★
+                    </div>
+                  </div>
+
+                  <h3 className="text-xl font-bold text-gray-900 mb-1 group-hover:text-purple-600 transition-colors">
+                    {teacher.name}
+                  </h3>
+                  <p className="text-purple-600 text-sm font-medium mb-4 uppercase tracking-wider text-xs">
+                    {teacher.specialization}
+                  </p>
+
+                  {/* Social Icons - Animated */}
+                  <div className="flex justify-center gap-3 mb-4 opacity-100 transition-opacity duration-300">
+                    <button className="w-8 h-8 rounded-full bg-gray-100 text-gray-600 hover:bg-blue-600 hover:text-white flex items-center justify-center transition-colors">
+                      <FaFacebook size={14} />
+                    </button>
+                    <button className="w-8 h-8 rounded-full bg-gray-100 text-gray-600 hover:bg-sky-500 hover:text-white flex items-center justify-center transition-colors">
+                      <FaTwitter size={14} />
+                    </button>
+                    <button className="w-8 h-8 rounded-full bg-gray-100 text-gray-600 hover:bg-blue-700 hover:text-white flex items-center justify-center transition-colors">
+                      <FaLinkedin size={14} />
+                    </button>
+                  </div>
+
+                  <div className="border-t border-dashed border-gray-200 my-4"></div>
+
+                  <div className="flex justify-between items-center text-sm">
+                    <span className="text-gray-500">Courses</span>
+                    <span className="font-bold text-gray-900">{teacher.courses}</span>
+                  </div>
+                  <div className="mt-3 text-xs font-bold text-purple-700">
+                    Click to view full details →
+                  </div>
                 </div>
-                <h3 className="text-lg font-bold text-gray-800 mb-1">
-                  Teacher {teacher}
-                </h3>
-                <p className="text-gray-600 text-sm mb-3">Expert Instructor</p>
-                <div className="flex items-center justify-center gap-1 mb-3">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <FaStar key={star} className="text-yellow-400 text-sm" />
-                  ))}
-                </div>
-                <p className="text-sm text-gray-500">
-                  {10 + teacher * 5} Courses
-                </p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
 
         {/* Stats Section */}
-        <div className="bg-white rounded-xl shadow-lg p-8">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">
-            Your Learning Progress
-          </h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="text-center p-6 bg-purple-50 rounded-lg">
-              <FaBook className="text-purple-600 text-4xl mx-auto mb-3" />
-              <p className="text-3xl font-bold text-purple-600 mb-1">12</p>
-              <p className="text-gray-600">Enrolled Courses</p>
+        <div className="bg-purple-600 rounded-[30px] p-8 md:p-12 mb-16 relative overflow-hidden">
+          {/* Decorative Elements */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl"></div>
+          <div className="absolute bottom-0 left-0 w-32 h-32 bg-pink-500/20 rounded-full translate-y-1/2 -translate-x-1/2 blur-xl"></div>
+
+          <div className="relative z-10">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-white mb-4">
+                Your Learning Analytics
+              </h2>
+              <p className="text-purple-100 max-w-2xl mx-auto">
+                Track your progress and achievements as you advance through your learning journey.
+              </p>
             </div>
-            <div className="text-center p-6 bg-indigo-50 rounded-lg">
-              <FaCertificate className="text-indigo-600 text-4xl mx-auto mb-3" />
-              <p className="text-3xl font-bold text-indigo-600 mb-1">5</p>
-              <p className="text-gray-600">Completed Courses</p>
-            </div>
-            <div className="text-center p-6 bg-purple-50 rounded-lg">
-              <FaGraduationCap className="text-purple-600 text-4xl mx-auto mb-3" />
-              <p className="text-3xl font-bold text-purple-600 mb-1">3</p>
-              <p className="text-gray-600">Certificates Earned</p>
+
+            <div className="grid md:grid-cols-3 gap-8">
+              {/* Stat Card 1 */}
+              <div className="group bg-white rounded-3xl p-6 shadow-xl hover:-translate-y-2 transition-all duration-300 relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                  <FaBook className="text-8xl text-purple-600 transform rotate-12" />
+                </div>
+                <div className="relative z-10 flex items-center gap-6">
+                  <div className="w-16 h-16 rounded-2xl bg-purple-100 flex items-center justify-center text-purple-600 shadow-sm group-hover:scale-110 transition-transform duration-300">
+                    <FaBook className="text-3xl" />
+                  </div>
+                  <div>
+                    <p className="text-gray-500 font-medium mb-1">Enrolled Courses</p>
+                    <h3 className="text-4xl font-extrabold text-gray-900">12</h3>
+                  </div>
+                </div>
+                <div className="mt-4 w-full bg-gray-100 rounded-full h-2 overflow-hidden">
+                  <div className="bg-purple-600 h-full rounded-full w-3/4"></div>
+                </div>
+                <p className="text-xs text-purple-600 mt-2 font-bold">+2 this month</p>
+              </div>
+
+              {/* Stat Card 2 */}
+              <div className="group bg-white rounded-3xl p-6 shadow-xl hover:-translate-y-2 transition-all duration-300 relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                  <FaCertificate className="text-8xl text-pink-600 transform rotate-12" />
+                </div>
+                <div className="relative z-10 flex items-center gap-6">
+                  <div className="w-16 h-16 rounded-2xl bg-pink-100 flex items-center justify-center text-pink-600 shadow-sm group-hover:scale-110 transition-transform duration-300">
+                    <FaCertificate className="text-3xl" />
+                  </div>
+                  <div>
+                    <p className="text-gray-500 font-medium mb-1">Completed</p>
+                    <h3 className="text-4xl font-extrabold text-gray-900">5</h3>
+                  </div>
+                </div>
+                <div className="mt-4 w-full bg-gray-100 rounded-full h-2 overflow-hidden">
+                  <div className="bg-pink-500 h-full rounded-full w-1/2"></div>
+                </div>
+                <p className="text-xs text-pink-600 mt-2 font-bold">42% completion rate</p>
+              </div>
+
+              {/* Stat Card 3 */}
+              <div className="group bg-white rounded-3xl p-6 shadow-xl hover:-translate-y-2 transition-all duration-300 relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                  <FaGraduationCap className="text-8xl text-indigo-600 transform rotate-12" />
+                </div>
+                <div className="relative z-10 flex items-center gap-6">
+                  <div className="w-16 h-16 rounded-2xl bg-indigo-100 flex items-center justify-center text-indigo-600 shadow-sm group-hover:scale-110 transition-transform duration-300">
+                    <FaGraduationCap className="text-3xl" />
+                  </div>
+                  <div>
+                    <p className="text-gray-500 font-medium mb-1">Certificates</p>
+                    <h3 className="text-4xl font-extrabold text-gray-900">3</h3>
+                  </div>
+                </div>
+                <div className="mt-4 w-full bg-gray-100 rounded-full h-2 overflow-hidden">
+                  <div className="bg-indigo-500 h-full rounded-full w-full"></div>
+                </div>
+                <p className="text-xs text-indigo-600 mt-2 font-bold">All perfect scores!</p>
+              </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Footer Section */}
+      <footer className="bg-gray-900 text-white pt-20 pb-10 rounded-t-[50px] mt-20 relative overflow-hidden">
+        {/* Background Decorative Elements */}
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+          <div className="absolute top-[-100px] right-[-100px] w-96 h-96 bg-purple-600/20 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-[-100px] left-[-100px] w-96 h-96 bg-pink-600/20 rounded-full blur-3xl"></div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+            {/* Brand Column */}
+            <div className="space-y-6">
+              <h3 className="text-3xl font-extrabold text-white flex items-center gap-2">
+                <FaGraduationCap className="text-purple-500" />
+                Edura
+              </h3>
+              <p className="text-gray-400 leading-relaxed">
+                Empowering learners worldwide with accessible, high-quality education. Join our community and start your journey today.
+              </p>
+              <div className="flex gap-4">
+                {[FaFacebook, FaTwitter, FaInstagram, FaLinkedin].map((Icon, index) => (
+                  <a
+                    key={index}
+                    href="#"
+                    className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-purple-600 hover:text-white transition-all duration-300 transform hover:-translate-y-1"
+                  >
+                    <Icon />
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            {/* Quick Links */}
+            <div>
+              <h4 className="text-xl font-bold mb-6 text-white">Quick Links</h4>
+              <ul className="space-y-3">
+                {['About Us', 'Our Courses', 'Instructors', 'Testimonials', 'Blog'].map((item) => (
+                  <li key={item}>
+                    <a href="#" className="text-gray-400 hover:text-purple-400 transition flex items-center gap-2 group">
+                      <span className="w-1.5 h-1.5 bg-purple-500 rounded-full opacity-0 group-hover:opacity-100 transition"></span>
+                      {item}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Resources */}
+            <div>
+              <h4 className="text-xl font-bold mb-6 text-white">Resources</h4>
+              <ul className="space-y-3">
+                {['Help Center', 'Terms of Service', 'Privacy Policy', 'Sitemap', 'Contact Us'].map((item) => (
+                  <li key={item}>
+                    <a href="#" className="text-gray-400 hover:text-purple-400 transition flex items-center gap-2 group">
+                      <span className="w-1.5 h-1.5 bg-pink-500 rounded-full opacity-0 group-hover:opacity-100 transition"></span>
+                      {item}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Newsletter */}
+            <div>
+              <h4 className="text-xl font-bold mb-6 text-white">Newsletter</h4>
+              <p className="text-gray-400 mb-4">
+                Subscribe to our newsletter for the latest updates and offers.
+              </p>
+              <div className="relative">
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  className="w-full bg-gray-800 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 border border-gray-700"
+                />
+                <button className="absolute right-2 top-2 bg-purple-600 text-white p-2 rounded-lg hover:bg-purple-700 transition shadow-lg hover:shadow-purple-500/30">
+                  <FaPaperPlane size={14} />
+                </button>
+              </div>
+              <div className="mt-6 space-y-3">
+                <div className="flex items-center gap-3 text-gray-400">
+                  <FaPhone className="text-purple-500" />
+                  <span>+1 (234) 567-890</span>
+                </div>
+                <div className="flex items-center gap-3 text-gray-400">
+                  <FaEnvelope className="text-purple-500" />
+                  <span>support@edura.com</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
+            <p className="text-gray-500">
+              © 2024 <span className="text-white font-bold">Edura</span>. All rights reserved.
+            </p>
+            <div className="flex gap-6 text-sm text-gray-500">
+              <a href="#" className="hover:text-purple-400 transition">Privacy Policy</a>
+              <a href="#" className="hover:text-purple-400 transition">Terms of Use</a>
+              <a href="#" className="hover:text-purple-400 transition">Cookie Policy</a>
+            </div>
+          </div>
+        </div>
+      </footer>
       {/* Video Modal Overlay */}
       {activeVideo && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
