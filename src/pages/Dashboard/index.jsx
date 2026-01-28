@@ -79,6 +79,23 @@ const Dashboard = () => {
               </div>
               What's Edura?
             </button>
+            {/* <button
+              onClick={() => navigate('/videos')}
+              className="bg-red-600 text-white px-6 py-4 rounded-lg font-bold shadow-lg hover:bg-red-700 transition flex items-center gap-2"
+            >
+              <FaPlayCircle className="text-sm" />
+              Video Library
+            </button> */}
+            <button
+              onClick={() => {
+                const randomRoomId = Date.now().toString();
+                navigate(`/room/${randomRoomId}`);
+              }}
+              className="bg-purple-800 text-white px-6 py-4 rounded-lg font-bold shadow-lg hover:bg-purple-900 transition flex items-center gap-2"
+            >
+              <FaPhone className="text-sm" />
+              Start Video Call
+            </button>
           </div>
         </div>
 

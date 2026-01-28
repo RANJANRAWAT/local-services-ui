@@ -20,10 +20,13 @@ import HelpCenter from './pages/HelpCenter'
 import Terms from './pages/Terms'
 import Privacy from './pages/Privacy'
 import Sitemap from './pages/Sitemap'
+import VideoCall from './pages/VideoCall'
+import ChatBot from './components/ChatBot'
+import VideoSearch from './pages/VideoSearch'
 
 const AppContent = () => {
   const location = useLocation();
-  const hideNavbarPaths = ['/', '/login', '/register', '/forgot-password'];
+  const hideNavbarPaths = ['/', '/login', '/register', '/forgot-password', '/room/:roomId', '/videos'];
   const showNavbar = !hideNavbarPaths.includes(location.pathname);
 
   return (
@@ -46,8 +49,11 @@ const AppContent = () => {
         <Route path="/help-center" element={<HelpCenter />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/privacy" element={<Privacy />} />
+        <Route path="/room/:roomId" element={<VideoCall />} />
+        <Route path="/videos" element={<VideoSearch />} />
         <Route path="/sitemap" element={<Sitemap />} />
       </Routes>
+      <ChatBot />
     </div>
   );
 };
